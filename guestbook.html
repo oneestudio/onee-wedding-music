@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Wedding Wishes</title>
 
 <style>
+
 * {
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+body {
   background: #f8f3eb;
   color: #756b61;
   font-family: Arial, sans-serif;
@@ -66,6 +76,10 @@ body {
   letter-spacing: 1.5px;
 }
 
+.button:hover {
+  background: #eee7dd;
+}
+
 .divider {
   display: flex;
   align-items: center;
@@ -111,8 +125,7 @@ body {
   white-space: pre-line;
 }
 
-.loading,
-.empty {
+.loading {
   text-align: center;
   padding: 25px 0;
   font-family: Georgia, serif;
@@ -120,15 +133,34 @@ body {
   font-style: italic;
   color: #a29587;
 }
+
+.error {
+  text-align: center;
+  padding: 25px 0;
+  font-family: Georgia, serif;
+  font-size: 13px;
+  font-style: italic;
+  color: #a29587;
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="guestbook">
 
+
+  <!-- TITLE -->
+
   <div class="title">
-    <div class="heart">♡</div>
+
+    <div class="heart">
+      ♡
+    </div>
 
     <div class="heading">
       WEDDING WISHES
@@ -137,15 +169,19 @@ body {
     <div class="subtitle">
       Leave a little love for us ♡
     </div>
+
   </div>
 
+
+  <!-- SEND WISH BUTTON -->
 
   <div class="button-wrap">
 
     <a
       class="button"
-      href="https://docs.google.com/forms/d/e/1FAIpQLSf2i2FAY7lQoDRrdWIf54LeL246g7V27nudCFh3mHZbwJ3CYw/viewform?usp=header"
+      href="https://docs.google.com/forms/d/e/1FAIpQLSf2i2FAY7lQoDRrdWIf54LeL246g7V27nudCFh3mHZbwJ3CYw/viewform"
       target="_blank"
+      rel="noopener"
     >
       SEND YOUR WISH ♡
     </a>
@@ -153,81 +189,177 @@ body {
   </div>
 
 
+  <!-- DIVIDER -->
+
   <div class="divider">
-    <span>OUR GUESTBOOK</span>
+
+    <span>
+      OUR GUESTBOOK
+    </span>
+
   </div>
 
 
+  <!-- MESSAGES -->
+
   <div id="messages">
+
     <div class="loading">
       Loading wishes ♡
     </div>
+
   </div>
+
 
 </div>
 
 
 <script>
 
-function oneeGuestbook(data) {
 
-  const container = document.getElementById("messages");
+/* =========================
+   DISPLAY GUESTBOOK
+========================= */
 
-  if (!data || data.length === 0) {
+
+function oneeGuestbook(messages) {
+
+  const container =
+    document.getElementById("messages");
+
+
+  if (!messages || messages.length === 0) {
 
     container.innerHTML = `
-      <div class="empty">
+
+      <div class="loading">
+
         Be the first to leave a little love ♡
+
       </div>
+
     `;
 
     return;
+
   }
 
 
   container.innerHTML = "";
 
 
-  data.forEach(function(item) {
+  messages.forEach(function(item) {
 
-    const message = document.createElement("div");
 
-    message.className = "message";
+    const message =
+      document.createElement("div");
+
+
+    message.className =
+      "message";
+
 
     message.innerHTML = `
+
       <div class="name">
+
         ♡ ${escapeHTML(item.name)}
+
       </div>
 
+
       <div class="wish">
+
         “${escapeHTML(item.wishes)}”
+
       </div>
+
     `;
+
 
     container.appendChild(message);
 
+
   });
 
+
 }
+
+
+/* =========================
+   SECURITY
+========================= */
 
 
 function escapeHTML(text) {
 
-  const div = document.createElement("div");
+  return String(text)
 
-  div.textContent = text;
+    .replace(/&/g, "&amp;")
 
-  return div.innerHTML;
+    .replace(/</g, "&lt;")
+
+    .replace(/>/g, "&gt;")
+
+    .replace(/"/g, "&quot;")
+
+    .replace(/'/g, "&#039;");
 
 }
+
+
+/* =========================
+   LOAD GOOGLE APPS SCRIPT
+========================= */
+
+
+function loadGuestbook() {
+
+
+  const script =
+    document.createElement("script");
+
+
+  script.src =
+
+    "https://script.google.com/macros/s/AKfycbzv6-n3S92vPmg1-3LbYOV5fz5lB2oLSiFx6vQI09b7488jzG2OoW8f-zc4J3u-aBEUhQ/exec?callback=oneeGuestbook&t="
+    + Date.now();
+
+
+  script.onerror = function() {
+
+
+    document.getElementById("messages").innerHTML = `
+
+      <div class="error">
+
+        Unable to load wishes ♡
+
+      </div>
+
+    `;
+
+
+  };
+
+
+  document.body.appendChild(script);
+
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+
+loadGuestbook();
+
 
 </script>
 
 
-<!-- Google Apps Script Guestbook API -->
-
-<script src="https://script.google.com/macros/s/AKfycbzv6-n3S92vPmg1-3LbYOV5fz5lB2oLSiFx6vQI09b7488jzG2OoW8f-zc4J3u-aBEUhQ/exec?callback=oneeGuestbook"></script>
-
-
 </body>
+
 </html>
