@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wedding Wishes</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f8f3eb;
+  color: #756b61;
+  font-family: Arial, sans-serif;
+}
+
+.guestbook {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+  padding: 45px 20px 60px;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.heart {
+  font-family: Georgia, serif;
+  font-size: 25px;
+  margin-bottom: 8px;
+}
+
+.heading {
+  font-size: 13px;
+  letter-spacing: 3px;
+}
+
+.subtitle {
+  margin-top: 8px;
+  font-family: Georgia, serif;
+  font-size: 14px;
+  font-style: italic;
+  color: #968a7d;
+}
+
+.button-wrap {
+  text-align: center;
+  margin: 25px 0 38px;
+}
+
+.button {
+  display: inline-block;
+  padding: 12px 24px;
+  border: 1px solid #b8aa9b;
+  border-radius: 30px;
+  color: #756b61;
+  background: transparent;
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.divider:before,
+.divider:after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ddd3c7;
+}
+
+.divider span {
+  font-size: 9px;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  color: #a29587;
+}
+
+.message {
+  background: rgba(255,255,255,0.55);
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(190,175,160,0.35);
+}
+
+.name {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.wish {
+  font-family: Georgia, serif;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #81766b;
+  font-style: italic;
+  white-space: pre-line;
+}
+
+.loading,
+.empty {
+  text-align: center;
+  padding: 25px 0;
+  font-family: Georgia, serif;
+  font-size: 13px;
+  font-style: italic;
+  color: #a29587;
+}
+</style>
+</head>
+
+<body>
+
+<div class="guestbook">
+
+  <div class="title">
+    <div class="heart">♡</div>
+
+    <div class="heading">
+      WEDDING WISHES
+    </div>
+
+    <div class="subtitle">
+      Leave a little love for us ♡
+    </div>
+  </div>
+
+
+  <div class="button-wrap">
+
+    <a
+      class="button"
+      href="https://docs.google.com/forms/d/e/1FAIpQLSf2i2FAY7lQoDRrdWIf54LeL246g7V27nudCFh3mHZbwJ3CYw/viewform?usp=header"
+      target="_blank"
+    >
+      SEND YOUR WISH ♡
+    </a>
+
+  </div>
+
+
+  <div class="divider">
+    <span>OUR GUESTBOOK</span>
+  </div>
+
+
+  <div id="messages">
+    <div class="loading">
+      Loading wishes ♡
+    </div>
+  </div>
+
+</div>
+
+
+<script>
+
+function oneeGuestbook(data) {
+
+  const container = document.getElementById("messages");
+
+  if (!data || data.length === 0) {
+
+    container.innerHTML = `
+      <div class="empty">
+        Be the first to leave a little love ♡
+      </div>
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML = "";
+
+
+  data.forEach(function(item) {
+
+    const message = document.createElement("div");
+
+    message.className = "message";
+
+    message.innerHTML = `
+      <div class="name">
+        ♡ ${escapeHTML(item.name)}
+      </div>
+
+      <div class="wish">
+        “${escapeHTML(item.wishes)}”
+      </div>
+    `;
+
+    container.appendChild(message);
+
+  });
+
+}
+
+
+function escapeHTML(text) {
+
+  const div = document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+
+}
+
+</script>
+
+
+<!-- Google Apps Script Guestbook API -->
+
+<script src="https://script.google.com/macros/s/AKfycbzv6-n3S92vPmg1-3LbYOV5fz5lB2oLSiFx6vQI09b7488jzG2OoW8f-zc4J3u-aBEUhQ/exec?callback=oneeGuestbook"></script>
+
+
+</body>
+</html>
